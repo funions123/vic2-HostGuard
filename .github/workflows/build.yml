@@ -1,0 +1,45 @@
+name: build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install nuitka pydivert
+      - name: Build with Nuitka
+        run: >
+          python -m nuitka --onefile --assume-yes-for-downloads
+          --include-package-data=pydivert
+          --output-filename=vic2hostguard-win.exe win_main.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vic2hostguard-windows
+          path: vic2hostguard-win.exe
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install system dependencies
+        run: sudo apt-get update && sudo apt-get install -y libnetfilter-queue-dev patchelf
+      - name: Install dependencies
+        run: pip install nuitka NetfilterQueue
+      - name: Build with Nuitka
+        run: >
+          python -m nuitka --onefile --assume-yes-for-downloads
+          --output-filename=vic2hostguard-linux linux_main.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vic2hostguard-linux
+          path: vic2hostguard-linux

@@ -1,0 +1,15 @@
+# Nuitka build output
+*.build/
+*.dist/
+*.onefile-build/
+vic2filter-win.exe
+vic2filter-linux
+
+# runtime log
+vic2filter.log
+
+# python
+__pycache__/
+*.pyc
+
+local/

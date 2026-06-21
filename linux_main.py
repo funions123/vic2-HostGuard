@@ -28,6 +28,10 @@ try:
     nfqueue.run()
 except KeyboardInterrupt:
     pass
+except Exception as e:
+    core.log(f"FATAL: {type(e).__name__}: {e}")
+    core.log("  -> 'permission denied' means run as root (sudo).")
+    core.log("  -> ensure the iptables NFQUEUE rule is set and libnetfilter-queue is installed.")
 finally:
     nfqueue.unbind()
     core.close()

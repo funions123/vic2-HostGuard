@@ -16,5 +16,9 @@ try:
             # else: not re-injected => dropped before the game sees it
 except KeyboardInterrupt:
     pass
+except Exception as e:
+    core.log(f"FATAL: {type(e).__name__}: {e}")
+    core.log("  -> 'access denied' means run as Administrator.")
+    core.log("  -> a WinDivert.dll/.sys error means the driver was not bundled in the build.")
 finally:
     core.close()

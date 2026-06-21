@@ -15,10 +15,12 @@ jobs:
       - name: Install dependencies
         run: pip install nuitka pydivert
       - name: Build with Nuitka
-        run: >
-          python -m nuitka --onefile --assume-yes-for-downloads
-          --include-package-data=pydivert
-          --output-filename=vic2hostguard-win.exe win_main.py
+        shell: pwsh
+        run: |
+          $dll = python -c "import pydivert, os; print(os.path.join(os.path.dirname(pydivert.__file__), 'windivert_dll'))"
+          python -m nuitka --onefile --assume-yes-for-downloads `
+            --include-data-dir="$dll=pydivert/windivert_dll" `
+            --output-filename=vic2hostguard-win.exe win_main.py
       - uses: actions/upload-artifact@v4
         with:
           name: vic2hostguard-windows

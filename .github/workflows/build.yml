@@ -43,3 +43,21 @@ jobs:
         with:
           name: vic2hostguard-linux
           path: vic2hostguard-linux
+
+  release:
+    needs: [windows, linux]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    permissions:
+      contents: write
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            artifacts/vic2hostguard-windows/vic2hostguard-win.exe
+            artifacts/vic2hostguard-linux/vic2hostguard-linux

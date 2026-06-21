@@ -17,9 +17,12 @@ jobs:
       - name: Build with Nuitka
         shell: pwsh
         run: |
-          $dll = python -c "import pydivert, os; print(os.path.join(os.path.dirname(pydivert.__file__), 'windivert_dll'))"
+          $ddir = python -c "import pydivert, os; print(os.path.join(os.path.dirname(pydivert.__file__), 'windivert_dll'))"
+          Write-Host "windivert_dll = $ddir"
+          Get-ChildItem $ddir   # proves the .dll/.sys exist on the runner before bundling
           python -m nuitka --onefile --assume-yes-for-downloads `
-            --include-data-dir="$dll=pydivert/windivert_dll" `
+            --include-data-files="$ddir\WinDivert64.dll=pydivert/windivert_dll/WinDivert64.dll" `
+            --include-data-files="$ddir\WinDivert64.sys=pydivert/windivert_dll/WinDivert64.sys" `
             --output-filename=vic2hostguard-win.exe win_main.py
       - uses: actions/upload-artifact@v4
         with:

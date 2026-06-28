@@ -11,7 +11,7 @@ OPCODE   = 6             # message type that carries the vulnerable name/lobby r
 RATE_MAX = 200           # max packets/sec from a single source before we drop (flood guard)
 WINDOW   = 1.0
 
-DRY_RUN  = True          # True = log only, forward everything; False = actually drop
+DRY_RUN  = false          # True = log only, forward everything; False = actually drop
 LOGFILE  = "vic2filter.log"
 
 hits  = collections.defaultdict(list)   # src_ip -> recent timestamps
